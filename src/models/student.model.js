@@ -14,7 +14,6 @@ const studentSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
       validate: {
         validator: function (email) {
@@ -41,33 +40,32 @@ const studentSchema = new Schema(
     studentPan: {
       type: String,
       // unique: [true, "student PAN must be unique"],
-      required: [true, "PAN is required"], // Allows unique constraint on optional fields
     },
     aadharId: {
       type: String,
       // unique: [true, "Student Aadhar ID must be unique"],
-      required: [true, "Aadhar ID is required while registering a student"],
+    },
+    motherName: {
+      type: String,
     },
     motherAadhar: {
       type: String,
-      required: [true, "Mother's Aadhar is required"],
+    },
+    fatherName: {
+      type: String,
     },
     fatherAadhar: {
       type: String,
-      required: [true, "Father's Aadhar is required"],
     },
     address: {
       type: String,
-      required: [true, "Address is required while registering a student"],
     },
     phoneNumber: {
       type: String,
-      required: [true, "Phone number is required"],
       // unique: [true, "Phone number must be unique"],
     },
     whatsappNumber: {
       type: String,
-      required: [true, "WhatsApp number is required"],
       // unique: [true, "WhatsApp number must be unique"],
     },
     studentClass: {
@@ -80,14 +78,9 @@ const studentSchema = new Schema(
     subjects: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
     parentContact: {
       type: String,
-      required: [
-        true,
-        "Parent contact is required while registering a student",
-      ],
     },
     parentName: {
       type: String,
-      required: [true, "Parent name is required while registering a student"],
     },
     role: {
       type: String,

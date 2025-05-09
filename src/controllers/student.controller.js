@@ -38,7 +38,9 @@ export const REGISTER_STUDENT = async (req, res) => {
     aadharId, // Fixed field names
     whatsappNumber,
     dob,
+    motherName,
     motherAadhar,
+    fatherName,
     fatherAadhar,
     studentPan,
     phoneNumber,
@@ -78,7 +80,9 @@ export const REGISTER_STUDENT = async (req, res) => {
           aadharId,
           whatsappNumber,
           dob,
+          motherName,
           motherAadhar,
+          fatherName,
           fatherAadhar,
           studentPan,
           phoneNumber,
@@ -145,14 +149,14 @@ export const REGISTER_STUDENT = async (req, res) => {
   }
 };
 export const LOGIN_STUDENT = async (req, res) => {
-  const { email = "", password = "" } = req.body;
+  const { studentId = "", password = "" } = req.body;
 
   try {
-    if ([email, password].some((field) => field.trim() === ""))
+    if ([studentId, password].some((field) => field.trim() === ""))
       throw new ApiError(400, "All fields are required");
 
     // search for student by email
-    const student = await Student.findOne({ email });
+    const student = await Student.findById(studentId);
 
     // If student not found, return 404
     if (!student) {
