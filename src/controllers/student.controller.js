@@ -5,6 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Subject } from "../models/subject.model.js";
 import { FeePayment } from "../models/feepayment.model.js";
+import { uploadFileOnCloudinary } from "../utils/cloudinary.utils.js";
 
 const generateAccessToken_RefreshToken = async function (userId) {
   try {
@@ -64,11 +65,21 @@ export const REGISTER_STUDENT = async (req, res) => {
       throw new ApiError(400, "Invalid class assigned to student");
     }
 
+    const profilePhotoLocalPath = req.file?.path;
+    let profilePhoto = null;
+    if (profilePhotoLocalPath) {
+      profilePhoto = await uploadFileOnCloudinary(profilePhotoLocalPath);
+    }
+    if (!profilePhoto) {
+      throw new ApiError(400, "Whoops! Profile photo upload failed!");
+    }
+
     // Create the student
     const newStudent = await Student.create(
       [
         {
           name,
+          profilePhoto: profilePhoto.secure_url,
           email,
           password,
           studentClass,

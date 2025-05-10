@@ -14,9 +14,11 @@ import {
   REGISTER_STUDENT,
   UPDATE_STUDENT,
 } from "../controllers/student.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 import { VERIFY_TOKEN } from "../middlewares/auth.middleware.js";
 import { authorize } from "../middlewares/authorize.middleware.js";
 import { getRatio } from "../controllers/genderratio.controller.js";
+
 const studentRouter = Router();
 
 // Route for student registration
@@ -24,6 +26,7 @@ studentRouter.post(
   "/register",
   VERIFY_TOKEN,
   authorize(["principal"]),
+  upload.single("profilePhoto"),
   REGISTER_STUDENT
 );
 studentRouter.post("/login", LOGIN_STUDENT);

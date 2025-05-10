@@ -12,6 +12,9 @@ const studentSchema = new Schema(
         "Student name is too long! Maximum characters allowed is 100",
       ],
     },
+    profilePhoto: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,
