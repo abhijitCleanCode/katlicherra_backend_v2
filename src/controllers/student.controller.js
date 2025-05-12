@@ -65,13 +65,14 @@ export const REGISTER_STUDENT = async (req, res) => {
       throw new ApiError(400, "Invalid class assigned to student");
     }
 
-    const profilePhotoLocalPath = req.file?.path;
-    let profilePhoto = null;
-    if (profilePhotoLocalPath) {
-      profilePhoto = await uploadFileOnCloudinary(profilePhotoLocalPath);
-    }
-    if (!profilePhoto) {
-      throw new ApiError(400, "Whoops! Profile photo upload failed!");
+    // Handle profile photo (optional)
+    let profilePhotoUrl = null;
+    if (req.file?.path) {
+      const profilePhoto = await uploadFileOnCloudinary(req.file.path);
+      if (profilePhoto) {
+        profilePhotoUrl = profilePhoto.secure_url;
+      }
+      // If upload fails, we don't throw error since profile photo is optional
     }
 
     // Create the student
@@ -79,7 +80,7 @@ export const REGISTER_STUDENT = async (req, res) => {
       [
         {
           name,
-          profilePhoto: profilePhoto.secure_url,
+          profilePhoto: profilePhotoUrl, // will be null if not provided or upload failed
           email,
           password,
           studentClass,
@@ -159,6 +160,7 @@ export const REGISTER_STUDENT = async (req, res) => {
     });
   }
 };
+
 export const LOGIN_STUDENT = async (req, res) => {
   const { studentId = "", password = "" } = req.body;
 
